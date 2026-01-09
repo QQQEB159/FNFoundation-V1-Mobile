@@ -175,7 +175,9 @@ class EditorLua {
 			}
 		});
 
+		#if DISCORD_ALLOWED
 		Discord.DiscordClient.addLuaCallbacks(lua);
+		#end
 
 		call('onCreate', []);
 		#end
