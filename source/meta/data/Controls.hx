@@ -10,6 +10,8 @@ import flixel.input.actions.FlxActionSet;
 import flixel.input.gamepad.FlxGamepadButton;
 import flixel.input.gamepad.FlxGamepadInputID;
 import flixel.input.keyboard.FlxKey;
+import meta.states.substate.MusicBeatSubstate;
+import mobile.input.MobileInputID;
 
 enum abstract Action(String) to String from String
 {
@@ -43,14 +45,10 @@ enum abstract Action(String) to String from String
 	var NOTE_DODGE_R = "note_dodge-release";
 
 	var ACCEPT = "accept";
-	var ACCEPT_HOLD = "accept-hold";
-	var ACCEPT_RELEASE = "accept-release";
-
 	var BACK = "back";
 	var PAUSE = "pause";
 	var RESET = "reset";
 }
-
 
 enum Device
 {
@@ -123,177 +121,178 @@ class Controls extends FlxActionSet
 	var _note_dodgeR = new FlxActionDigital(Action.NOTE_DODGE_R);
 
 	var _accept = new FlxActionDigital(Action.ACCEPT);
-	var _accept_hold = new FlxActionDigital(Action.ACCEPT_HOLD);
-	var _accept_release = new FlxActionDigital(Action.ACCEPT_RELEASE);
-
 	var _back = new FlxActionDigital(Action.BACK);
 	var _pause = new FlxActionDigital(Action.PAUSE);
 	var _reset = new FlxActionDigital(Action.RESET);
 
 	var byName:Map<String, FlxActionDigital> = [];
 
-
 	public var gamepadsAdded:Array<Int> = [];
 	public var keyboardScheme = KeyboardScheme.None;
 
-	public var UI_UP(get, never):Bool;
+    public var UI_UP(get, never):Bool;
 
 	inline function get_UI_UP()
-		return _ui_up.check();
+		return _ui_up.check() || mobileControlsPressed(MobileInputID.UP);
 
 	public var UI_LEFT(get, never):Bool;
 
 	inline function get_UI_LEFT()
-		return _ui_left.check();
+		return _ui_left.check() || mobileControlsPressed(MobileInputID.LEFT);
 
 	public var UI_RIGHT(get, never):Bool;
 
 	inline function get_UI_RIGHT()
-		return _ui_right.check();
+		return _ui_right.check() || mobileControlsPressed(MobileInputID.RIGHT);
 
 	public var UI_DOWN(get, never):Bool;
 
 	inline function get_UI_DOWN()
-		return _ui_down.check();
+		return _ui_down.check() || mobileControlsPressed(MobileInputID.DOWN);
 
 	public var UI_UP_P(get, never):Bool;
 
 	inline function get_UI_UP_P()
-		return _ui_upP.check();
+		return _ui_upP.check() || mobileControlsJustPressed(MobileInputID.UP);
 
 	public var UI_LEFT_P(get, never):Bool;
 
 	inline function get_UI_LEFT_P()
-		return _ui_leftP.check();
+		return _ui_leftP.check() || mobileControlsJustPressed(MobileInputID.LEFT);
 
 	public var UI_RIGHT_P(get, never):Bool;
 
 	inline function get_UI_RIGHT_P()
-		return _ui_rightP.check();
+		return _ui_rightP.check() || mobileControlsJustPressed(MobileInputID.RIGHT);
 
 	public var UI_DOWN_P(get, never):Bool;
 
 	inline function get_UI_DOWN_P()
-		return _ui_downP.check();
+		return _ui_downP.check() || mobileControlsJustPressed(MobileInputID.DOWN);
 
 	public var UI_UP_R(get, never):Bool;
 
 	inline function get_UI_UP_R()
-		return _ui_upR.check();
+		return _ui_upR.check() || mobileControlsJustReleased(MobileInputID.UP);
 
 	public var UI_LEFT_R(get, never):Bool;
 
 	inline function get_UI_LEFT_R()
-		return _ui_leftR.check();
+		return _ui_leftR.check() || mobileControlsJustReleased(MobileInputID.LEFT);
 
 	public var UI_RIGHT_R(get, never):Bool;
 
 	inline function get_UI_RIGHT_R()
-		return _ui_rightR.check();
+		return _ui_rightR.check() || mobileControlsJustReleased(MobileInputID.RIGHT);
 
 	public var UI_DOWN_R(get, never):Bool;
 
 	inline function get_UI_DOWN_R()
-		return _ui_downR.check();
+		return _ui_downR.check() || mobileControlsJustReleased(MobileInputID.DOWN);
 
 	public var NOTE_UP(get, never):Bool;
 
 	inline function get_NOTE_UP()
-		return _note_up.check();
+		return _note_up.check() || mobileControlsPressed(MobileInputID.NOTE_UP);
 
 	public var NOTE_LEFT(get, never):Bool;
 
 	inline function get_NOTE_LEFT()
-		return _note_left.check();
+		return _note_left.check() || mobileControlsPressed(MobileInputID.NOTE_LEFT);
 
 	public var NOTE_RIGHT(get, never):Bool;
 
 	inline function get_NOTE_RIGHT()
-		return _note_right.check();
+		return _note_right.check() || mobileControlsPressed(MobileInputID.NOTE_RIGHT);
 
 	public var NOTE_DOWN(get, never):Bool;
 
 	inline function get_NOTE_DOWN()
-		return _note_down.check();
+		return _note_down.check() || mobileControlsPressed(MobileInputID.NOTE_DOWN);
 
 	public var NOTE_UP_P(get, never):Bool;
 
 	inline function get_NOTE_UP_P()
-		return _note_upP.check();
+		return _note_upP.check() || mobileControlsJustPressed(MobileInputID.NOTE_UP);
 
 	public var NOTE_LEFT_P(get, never):Bool;
 
 	inline function get_NOTE_LEFT_P()
-		return _note_leftP.check();
+		return _note_leftP.check() || mobileControlsJustPressed(MobileInputID.NOTE_LEFT);
 
 	public var NOTE_RIGHT_P(get, never):Bool;
 
 	inline function get_NOTE_RIGHT_P()
-		return _note_rightP.check();
+		return _note_rightP.check() || mobileControlsJustPressed(MobileInputID.NOTE_RIGHT);
 
 	public var NOTE_DOWN_P(get, never):Bool;
 
 	inline function get_NOTE_DOWN_P()
-		return _note_downP.check();
+		return _note_downP.check() || mobileControlsJustPressed(MobileInputID.NOTE_DOWN);
 
 	public var NOTE_UP_R(get, never):Bool;
 
 	inline function get_NOTE_UP_R()
-		return _note_upR.check();
+		return _note_upR.check() || mobileControlsJustReleased(MobileInputID.NOTE_UP);
 
 	public var NOTE_LEFT_R(get, never):Bool;
 
 	inline function get_NOTE_LEFT_R()
-		return _note_leftR.check();
+		return _note_leftR.check() || mobileControlsJustReleased(MobileInputID.NOTE_LEFT);
 
 	public var NOTE_RIGHT_R(get, never):Bool;
 
 	inline function get_NOTE_RIGHT_R()
-		return _note_rightR.check();
+		return _note_rightR.check() || mobileControlsJustReleased(MobileInputID.NOTE_RIGHT);
 
 	public var NOTE_DOWN_R(get, never):Bool;
 
 	inline function get_NOTE_DOWN_R()
-		return _note_downR.check();
+		return _note_downR.check() || mobileControlsJustReleased(MobileInputID.NOTE_DOWN);
 
 	public var ACCEPT(get, never):Bool;
+
 	inline function get_ACCEPT()
-		return _accept.check();
-
-	public var ACCEPT_HOLD(get, never):Bool;
-	inline function get_ACCEPT_HOLD()
-		return _accept_hold.check();
-
-	public var ACCEPT_RELEASE(get, never):Bool;
-	inline function get_ACCEPT_RELEASE()
-		return _accept_release.check();
+		return _accept.check() || mobileControlsJustPressed(MobileInputID.A);
 
 	public var BACK(get, never):Bool;
 
 	inline function get_BACK()
-		return _back.check();
+		return _back.check() || mobileControlsJustPressed(MobileInputID.B);
 
 	public var PAUSE(get, never):Bool;
 
 	inline function get_PAUSE()
-		return _pause.check();
+		return _pause.check() || mobileControlsJustPressed(MobileInputID.P);
 
 	public var RESET(get, never):Bool;
 
 	inline function get_RESET()
 		return _reset.check();
 
+	public var mobileC(get, never):Bool;
 
 	public var NOTE_DODGE(get, never):Bool;
-	inline function get_NOTE_DODGE() return _note_dodge.check();
+
+	inline function get_NOTE_DODGE() return _note_dodge.check() || MusicBeatState.getState().mobileControls.buttonExtra.pressed;
 
 	public var NOTE_DODGE_P(get, never):Bool;
-	inline function get_NOTE_DODGE_P() return _note_dodgeP.check();
+
+	inline function get_NOTE_DODGE_P() return _note_dodgeP.check() || MusicBeatState.getState().mobileControls.buttonExtra.justPressed;
 
 	public var NOTE_DODGE_R(get, never):Bool;
-	inline function get_NOTE_DODGE_R() return _note_dodgeR.check();
 
-	#if (haxe >= "4.0.0")
+	inline function get_NOTE_DODGE_R() return _note_dodgeR.check() || MusicBeatState.getState().mobileControls.buttonExtra.justReleased;
+
+	@:noCompletion
+	private function get_mobileC():Bool
+	{
+		if (ClientPrefs.controlsAlpha >= 0.1)
+			return true;
+		else
+			return false;
+	}
+	
 	public function new(name, scheme = None)
 	{
 		super(name);
@@ -323,8 +322,6 @@ class Controls extends FlxActionSet
 		add(_note_rightR);
 		add(_note_downR);
 		add(_accept);
-		add(_accept_hold);
-		add(_accept_release);
 		add(_back);
 		add(_pause);
 		add(_reset);
@@ -334,50 +331,6 @@ class Controls extends FlxActionSet
 
 		setKeyboardScheme(scheme, false);
 	}
-	#else
-	public function new(name, scheme:KeyboardScheme = null)
-	{
-		super(name);
-
-		add(_ui_up);
-		add(_ui_left);
-		add(_ui_right);
-		add(_ui_down);
-		add(_ui_upP);
-		add(_ui_leftP);
-		add(_ui_rightP);
-		add(_ui_downP);
-		add(_ui_upR);
-		add(_ui_leftR);
-		add(_ui_rightR);
-		add(_ui_downR);
-		add(_note_up);
-		add(_note_left);
-		add(_note_right);
-		add(_note_down);
-		add(_note_upP);
-		add(_note_leftP);
-		add(_note_rightP);
-		add(_note_downP);
-		add(_note_upR);
-		add(_note_leftR);
-		add(_note_rightR);
-		add(_note_downR);
-		add(_accept);
-		add(_accept_hold);
-		add(_accept_release);
-		add(_back);
-		add(_pause);
-		add(_reset);
-
-		for (action in digitalActions)
-			byName[action.name] = action;
-
-		if (scheme == null)
-			scheme = None;
-		setKeyboardScheme(scheme, false);
-	}
-	#end
 
 	override function update()
 	{
@@ -388,8 +341,7 @@ class Controls extends FlxActionSet
 	public function checkByName(name:Action):Bool
 	{
 		#if debug
-		if (!byName.exists(name))
-			throw 'Invalid name: $name';
+		if (!byName.exists(name)) throw 'Invalid name: $name';
 		#end
 		return byName[name].check();
 	}
@@ -432,7 +384,7 @@ class Controls extends FlxActionSet
 	static function init():Void
 	{
 		var actions = new FlxActionManager();
-		FlxG.inputs.add(actions);
+		FlxG.inputs.addUniqueType(actions);
 	}
 
 	/**
@@ -479,8 +431,6 @@ class Controls extends FlxActionSet
 				func(_note_downR, JUST_RELEASED);
 			case ACCEPT:
 				func(_accept, JUST_PRESSED);
-				func(_accept_hold, PRESSED);
-				func(_accept_release, JUST_RELEASED);
 			case BACK:
 				func(_back, JUST_PRESSED);
 			case PAUSE:
@@ -492,61 +442,36 @@ class Controls extends FlxActionSet
 
 	public function replaceBinding(control:Control, device:Device, ?toAdd:Int, ?toRemove:Int)
 	{
-		if (toAdd == toRemove)
-			return;
+		if (toAdd == toRemove) return;
 
 		switch (device)
 		{
 			case Keys:
-				if (toRemove != null)
-					unbindKeys(control, [toRemove]);
-				if (toAdd != null)
-					bindKeys(control, [toAdd]);
+				if (toRemove != null) unbindKeys(control, [toRemove]);
+				if (toAdd != null) bindKeys(control, [toAdd]);
 
 			case Gamepad(id):
-				if (toRemove != null)
-					unbindButtons(control, id, [toRemove]);
-				if (toAdd != null)
-					bindButtons(control, id, [toAdd]);
+				if (toRemove != null) unbindButtons(control, id, [toRemove]);
+				if (toAdd != null) bindButtons(control, id, [toAdd]);
 		}
 	}
 
 	public function copyFrom(controls:Controls, ?device:Device)
 	{
-		#if (haxe >= "4.0.0")
 		for (name => action in controls.byName)
 		{
 			for (input in action.inputs)
 			{
-				if (device == null || isDevice(input, device))
-					byName[name].add(cast input);
+				if (device == null || isDevice(input, device)) byName[name].add(cast input);
 			}
 		}
-		#else
-		for (name in controls.byName.keys())
-		{
-			var action = controls.byName[name];
-			for (input in action.inputs)
-			{
-				if (device == null || isDevice(input, device))
-				byName[name].add(cast input);
-			}
-		}
-		#end
 
 		switch (device)
 		{
 			case null:
 				// add all
-				#if (haxe >= "4.0.0")
 				for (gamepad in controls.gamepadsAdded)
-					if (!gamepadsAdded.contains(gamepad))
-						gamepadsAdded.push(gamepad);
-				#else
-				for (gamepad in controls.gamepadsAdded)
-					if (gamepadsAdded.indexOf(gamepad) == -1)
-					  gamepadsAdded.push(gamepad);
-				#end
+					if (!gamepadsAdded.contains(gamepad)) gamepadsAdded.push(gamepad);
 
 				mergeKeyboardScheme(controls.keyboardScheme);
 
@@ -583,15 +508,12 @@ class Controls extends FlxActionSet
 	public function bindKeys(control:Control, keys:Array<FlxKey>)
 	{
 		var copyKeys:Array<FlxKey> = keys.copy();
-		for (i in 0...copyKeys.length) {
-			if(i == NONE) copyKeys.remove(i);
+		for (i in 0...copyKeys.length)
+		{
+			if (i == FlxKey.NONE) copyKeys.remove(i);
 		}
 
-		#if (haxe >= "4.0.0")
 		inline forEachBound(control, (action, state) -> addKeys(action, copyKeys, state));
-		#else
-		forEachBound(control, function(action, state) addKeys(action, copyKeys, state));
-		#end
 	}
 
 	/**
@@ -601,22 +523,18 @@ class Controls extends FlxActionSet
 	public function unbindKeys(control:Control, keys:Array<FlxKey>)
 	{
 		var copyKeys:Array<FlxKey> = keys.copy();
-		for (i in 0...copyKeys.length) {
-			if(i == NONE) copyKeys.remove(i);
+		for (i in 0...copyKeys.length)
+		{
+			if (i == FlxKey.NONE) copyKeys.remove(i);
 		}
 
-		#if (haxe >= "4.0.0")
 		inline forEachBound(control, (action, _) -> removeKeys(action, copyKeys));
-		#else
-		forEachBound(control, function(action, _) removeKeys(action, copyKeys));
-		#end
 	}
 
 	inline static function addKeys(action:FlxActionDigital, keys:Array<FlxKey>, state:FlxInputState)
 	{
 		for (key in keys)
-			if(key != NONE)
-				action.addKey(key, state);
+			if (key != NONE) action.addKey(key, state);
 	}
 
 	static function removeKeys(action:FlxActionDigital, keys:Array<FlxKey>)
@@ -625,20 +543,17 @@ class Controls extends FlxActionSet
 		while (i-- > 0)
 		{
 			var input = action.inputs[i];
-			if (input.device == KEYBOARD && keys.indexOf(cast input.inputID) != -1)
-				action.remove(input);
+			if (input.device == KEYBOARD && keys.indexOf(cast input.inputID) != -1) action.remove(input);
 		}
 	}
 
 	public function setKeyboardScheme(scheme:KeyboardScheme, reset = true)
 	{
-		if (reset)
-			removeKeyboard();
+		if (reset) removeKeyboard();
 
 		keyboardScheme = scheme;
 		var keysMap = ClientPrefs.keyBinds;
 
-		#if (haxe >= "4.0.0")
 		switch (scheme)
 		{
 			case Solo:
@@ -684,52 +599,6 @@ class Controls extends FlxActionSet
 			case None: // nothing
 			case Custom: // nothing
 		}
-		#else
-		switch (scheme)
-		{
-			case Solo:
-				bindKeys(Control.UI_UP, [W, FlxKey.UP]);
-				bindKeys(Control.UI_DOWN, [S, FlxKey.DOWN]);
-				bindKeys(Control.UI_LEFT, [A, FlxKey.LEFT]);
-				bindKeys(Control.UI_RIGHT, [D, FlxKey.RIGHT]);
-				bindKeys(Control.NOTE_UP, [W, FlxKey.UP]);
-				bindKeys(Control.NOTE_DOWN, [S, FlxKey.DOWN]);
-				bindKeys(Control.NOTE_LEFT, [A, FlxKey.LEFT]);
-				bindKeys(Control.NOTE_RIGHT, [D, FlxKey.RIGHT]);
-				bindKeys(Control.ACCEPT, [Z, SPACE, ENTER]);
-				bindKeys(Control.BACK, [BACKSPACE, ESCAPE]);
-				bindKeys(Control.PAUSE, [P, ENTER, ESCAPE]);
-				bindKeys(Control.RESET, [R]);
-			case Duo(true):
-				bindKeys(Control.UI_UP, [W]);
-				bindKeys(Control.UI_DOWN, [S]);
-				bindKeys(Control.UI_LEFT, [A]);
-				bindKeys(Control.UI_RIGHT, [D]);
-				bindKeys(Control.NOTE_UP, [W]);
-				bindKeys(Control.NOTE_DOWN, [S]);
-				bindKeys(Control.NOTE_LEFT, [A]);
-				bindKeys(Control.NOTE_RIGHT, [D]);
-				bindKeys(Control.ACCEPT, [G, Z]);
-				bindKeys(Control.BACK, [H, X]);
-				bindKeys(Control.PAUSE, [ONE]);
-				bindKeys(Control.RESET, [R]);
-			case Duo(false):
-				bindKeys(Control.UI_UP, [FlxKey.UP]);
-				bindKeys(Control.UI_DOWN, [FlxKey.DOWN]);
-				bindKeys(Control.UI_LEFT, [FlxKey.LEFT]);
-				bindKeys(Control.UI_RIGHT, [FlxKey.RIGHT]);
-				bindKeys(Control.NOTE_UP, [FlxKey.UP]);
-				bindKeys(Control.NOTE_DOWN, [FlxKey.DOWN]);
-				bindKeys(Control.NOTE_LEFT, [FlxKey.LEFT]);
-				bindKeys(Control.NOTE_RIGHT, [FlxKey.RIGHT]);
-				bindKeys(Control.ACCEPT, [O]);
-				bindKeys(Control.BACK, [P]);
-				bindKeys(Control.PAUSE, [ENTER]);
-				bindKeys(Control.RESET, [BACKSPACE]);
-			case None: // nothing
-			case Custom: // nothing
-		}
-		#end
 	}
 
 	function removeKeyboard()
@@ -740,8 +609,7 @@ class Controls extends FlxActionSet
 			while (i-- > 0)
 			{
 				var input = action.inputs[i];
-				if (input.device == KEYBOARD)
-					action.remove(input);
+				if (input.device == KEYBOARD) action.remove(input);
 			}
 		}
 	}
@@ -750,26 +618,16 @@ class Controls extends FlxActionSet
 	{
 		gamepadsAdded.push(id);
 
-		#if (haxe >= "4.0.0")
 		for (control => buttons in buttonMap)
 			inline bindButtons(control, id, buttons);
-		#else
-		for (control in buttonMap.keys())
-			bindButtons(control, id, buttonMap[control]);
-		#end
 	}
 
 	inline function addGamepadLiteral(id:Int, ?buttonMap:Map<Control, Array<FlxGamepadInputID>>):Void
 	{
 		gamepadsAdded.push(id);
 
-		#if (haxe >= "4.0.0")
 		for (control => buttons in buttonMap)
 			inline bindButtons(control, id, buttons);
-		#else
-		for (control in buttonMap.keys())
-			bindButtons(control, id, buttonMap[control]);
-		#end
 	}
 
 	public function removeGamepad(deviceID:Int = FlxInputDeviceID.ALL):Void
@@ -780,8 +638,7 @@ class Controls extends FlxActionSet
 			while (i-- > 0)
 			{
 				var input = action.inputs[i];
-				if (input.device == GAMEPAD && (deviceID == FlxInputDeviceID.ALL || input.deviceID == deviceID))
-					action.remove(input);
+				if (input.device == GAMEPAD && (deviceID == FlxInputDeviceID.ALL || input.deviceID == deviceID)) action.remove(input);
 			}
 		}
 
@@ -807,7 +664,7 @@ class Controls extends FlxActionSet
 		]);
 		#else
 		addGamepadLiteral(id, [
-			//Swap A and B for switch
+			// Swap A and B for switch
 			Control.ACCEPT => [B, START],
 			Control.BACK => [A],
 			Control.UI_UP => [DPAD_UP, LEFT_STICK_DIGITAL_UP, RIGHT_STICK_DIGITAL_UP],
@@ -830,11 +687,7 @@ class Controls extends FlxActionSet
 	 */
 	public function bindButtons(control:Control, id, buttons)
 	{
-		#if (haxe >= "4.0.0")
 		inline forEachBound(control, (action, state) -> addButtons(action, buttons, state, id));
-		#else
-		forEachBound(control, function(action, state) addButtons(action, buttons, state, id));
-		#end
 	}
 
 	/**
@@ -843,11 +696,7 @@ class Controls extends FlxActionSet
 	 */
 	public function unbindButtons(control:Control, gamepadID:Int, buttons)
 	{
-		#if (haxe >= "4.0.0")
 		inline forEachBound(control, (action, _) -> removeButtons(action, gamepadID, buttons));
-		#else
-		forEachBound(control, function(action, _) removeButtons(action, gamepadID, buttons));
-		#end
 	}
 
 	inline static function addButtons(action:FlxActionDigital, buttons:Array<FlxGamepadInputID>, state, id)
@@ -862,29 +711,25 @@ class Controls extends FlxActionSet
 		while (i-- > 0)
 		{
 			var input = action.inputs[i];
-			if (isGamepad(input, gamepadID) && buttons.indexOf(cast input.inputID) != -1)
-				action.remove(input);
+			if (isGamepad(input, gamepadID) && buttons.indexOf(cast input.inputID) != -1) action.remove(input);
 		}
 	}
 
 	public function getInputsFor(control:Control, device:Device, ?list:Array<Int>):Array<Int>
 	{
-		if (list == null)
-			list = [];
+		if (list == null) list = [];
 
 		switch (device)
 		{
 			case Keys:
 				for (input in getActionFromControl(control).inputs)
 				{
-					if (input.device == KEYBOARD)
-						list.push(input.inputID);
+					if (input.device == KEYBOARD) list.push(input.inputID);
 				}
 			case Gamepad(id):
 				for (input in getActionFromControl(control).inputs)
 				{
-					if (input.deviceID == id)
-						list.push(input.inputID);
+					if (input.deviceID == id) list.push(input.inputID);
 				}
 		}
 		return list;
@@ -913,5 +758,114 @@ class Controls extends FlxActionSet
 	inline static function isGamepad(input:FlxActionInput, deviceID:Int)
 	{
 		return input.device == GAMEPAD && (deviceID == FlxInputDeviceID.ALL || input.deviceID == deviceID);
+	}
+	
+	public function mobileControlsJustPressed(id:MobileInputID):Bool
+	{
+		final state:MusicBeatState = MusicBeatState.getState();
+		final substate:MusicBeatSubstate = MusicBeatSubstate.instance;
+		var bools:Array<Bool> = [false, false, false, false];
+
+		if (state != null)
+		{
+			if (state.touchPad != null)
+				bools[0] = state.touchPad.buttonJustPressed(id);
+
+			if (state.mobileControls != null)
+				bools[1] = state.mobileControls.instance.buttonJustPressed(id);
+		}
+
+		if (substate != null)
+		{
+			if (substate.touchPad != null)
+				bools[2] = substate.touchPad.buttonJustPressed(id);
+
+			if (substate.mobileControls != null)
+				bools[3] = substate.mobileControls.instance.buttonJustPressed(id);
+		}	
+
+		return bools.contains(true);
+	}
+
+	public function mobileControlsJustReleased(id:MobileInputID):Bool
+	{
+		final state:MusicBeatState = MusicBeatState.getState();
+		final substate:MusicBeatSubstate = MusicBeatSubstate.instance;
+		var bools:Array<Bool> = [false, false, false, false];
+
+		if (state != null)
+		{
+			if (state.touchPad != null)
+				bools[0] = state.touchPad.buttonJustReleased(id);
+
+			if (state.mobileControls != null)
+				bools[1] = state.mobileControls.instance.buttonJustReleased(id);
+		}
+
+		if (substate != null)
+		{
+			if (substate.touchPad != null)
+				bools[2] = substate.touchPad.buttonJustReleased(id);
+
+			if (substate.mobileControls != null)
+				bools[3] = substate.mobileControls.instance.buttonJustReleased(id);
+		}	
+
+		return bools.contains(true);
+	}
+
+	public function mobileControlsPressed(id:MobileInputID):Bool
+	{
+		final state:MusicBeatState = MusicBeatState.getState();
+		final substate:MusicBeatSubstate = MusicBeatSubstate.instance;
+		var bools:Array<Bool> = [false, false, false, false];
+
+		if (state != null)
+		{
+			if (state.touchPad != null)
+				bools[0] = state.touchPad.buttonPressed(id);
+
+			if (state.mobileControls != null)
+				bools[1] = state.mobileControls.instance.buttonPressed(id);
+		}
+
+		if (substate != null)
+		{
+			if (substate.touchPad != null)
+				bools[2] = substate.touchPad.buttonPressed(id);
+
+			if (substate.mobileControls != null)
+				bools[3] = substate.mobileControls.instance.buttonPressed(id);
+		}	
+
+		return bools.contains(true);
+	}
+
+	// this one probably useless b
+	public function mobileControlsReleased(id:MobileInputID):Bool
+	{
+		final state:MusicBeatState = MusicBeatState.getState();
+		final substate:MusicBeatSubstate = MusicBeatSubstate.instance;
+		var bools:Array<Bool> = [false, false, false, false];
+
+		if (state != null)
+		{
+			if (state.touchPad != null)
+				bools[0] = state.touchPad.buttonReleased(id);
+
+			if (state.mobileControls != null)
+				bools[1] = state.mobileControls.instance.buttonReleased(id);
+		}
+
+		if (substate != null)
+		{
+			if (substate.touchPad != null)
+				bools[2] = substate.touchPad.buttonReleased(id);
+
+			if (substate.mobileControls != null)
+				bools[3] = substate.mobileControls.instance.buttonReleased(id);
+		}	
+
+		return bools.contains(true);
 	}
 }
