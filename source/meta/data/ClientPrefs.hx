@@ -15,7 +15,16 @@ import meta.data.Controls.KeyboardScheme;
 	public var kutRerollCount = 0;
 }
 class ClientPrefs {
-
+    // Mobile and Mobile Controls Releated
+	public static var extraButtons:String = "NONE"; // mobile extra button option
+	public static var hitboxPos:Bool = true; // hitbox extra button position option
+	public static var controlsAlpha:Float = FlxG.onMobile ? 0.6 : 0;
+	public static var screensaver:Bool = false;
+	#if android
+	public static var storageType:String = "EXTERNAL";
+	#end
+	public static var hitboxType:String = "Gradient";
+    
 	public static var kutData:KutData={};
 
 	public static var yoshi:Bool = true;
@@ -159,6 +168,15 @@ class ClientPrefs {
 	}
 
 	public static function saveSettings() {
+		FlxG.save.data.extraButtons = extraButtons;
+		FlxG.save.data.hitboxPos = hitboxPos;
+		FlxG.save.data.controlsAlpha = controlsAlpha;
+		FlxG.save.data.screensaver = screensaver;
+		#if android
+		FlxG.save.data.storageType = storageType;
+		#end
+		FlxG.save.data.hitboxType = hitboxType;
+		
 		for (i in Reflect.fields(kutData)) Reflect.setField(FlxG.save.data, i, Reflect.field(kutData, i));
 
 		FlxG.save.data.gpuCaching = gpuCaching;
@@ -232,6 +250,27 @@ class ClientPrefs {
 	}
 
 	public static function loadPrefs() {
+		if(FlxG.save.data.extraButtons != null) {
+			extraButtons = FlxG.save.data.extraButtons;
+		}
+		if(FlxG.save.data.hitboxPos != null) {
+			hitboxPos = FlxG.save.data.hitboxPos;
+		}
+		if(FlxG.save.data.controlsAlpha != null) {
+			controlsAlpha = FlxG.save.data.controlsAlpha;
+		}
+		if(FlxG.save.data.screensaver != null) {
+			screensaver = FlxG.save.data.screensaver;
+		}
+		#if android
+		if(FlxG.save.data.storageType != null) {
+			storageType = FlxG.save.data.storageType;
+		}
+		#end
+		if(FlxG.save.data.hitboxType != null) {
+			hitboxType = FlxG.save.data.hitboxType;
+		}
+		
 		for (i in Reflect.fields(kutData)) if (Reflect.hasField(FlxG.save.data, i))
 			Reflect.setField(kutData, i, Reflect.field(FlxG.save.data, i));
 

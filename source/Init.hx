@@ -45,6 +45,8 @@ class Init extends FlxState
 		ClientPrefs.loadPrefs();	
 
 		Highscore.load();
+		
+		mobile.MobileData.init();
 
 		// FOUNDATION SAVE DATA
 		if (FlxG.save.data.foundation == null) FlxG.save.data.foundation = {

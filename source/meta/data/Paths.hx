@@ -94,6 +94,11 @@ class Paths
 		#if cpp
 		cpp.vm.Gc.compact();
 		#end
+		#if cpp
+		cpp.NativeGc.run(true);
+		#elseif hl
+		hl.Gc.major();
+		#end
 	}
 
 	// define the locally tracked assets
@@ -141,6 +146,9 @@ class Paths
 
 	public static function getPath(file:String, type:AssetType, ?library:Null<String> = null)
 	{
+		if (library == "mobile")
+			return getPreloadPath('mobile/$file');
+		
 		if (library != null)
 			return getLibraryPath(file, library);
 
@@ -612,7 +620,7 @@ class Paths
 	#if MODS_ALLOWED
 	inline static public function mods(key:String = '')
 	{
-		return 'content/' + key;
+		return #if mobile Sys.getCwd() + #end 'content/' + key;
 	}
 
 	inline static public function modsFont(key:String)
@@ -680,7 +688,7 @@ class Paths
 			if (FileSystem.exists(fileToCheck))
 				return fileToCheck;
 		}
-		return 'content/' + key;
+		return #if mobile Sys.getCwd() + #end 'content/' + key;
 	}
 
 	public static var globalMods:Array<String> = [];
@@ -814,4 +822,25 @@ class Paths
 		spr.loadAtlasEx(folderOrImg, spriteJson, animationJson);
 	}
 	#end
+	
+	public static function readDirectory(directory:String):Array<String>
+	{
+		#if MODS_ALLOWED
+		return FileSystem.readDirectory(directory);
+		#else
+		var dirs:Array<String> = [];
+		for (dir in Assets.list().filter(folder -> folder.startsWith(directory)))
+		{
+			@:privateAccess
+			for (library in lime.utils.Assets.libraries.keys())
+			{
+				if (library != 'default' && Assets.exists('$library:$dir') && (!dirs.contains('$library:$dir') || !dirs.contains(dir)))
+					dirs.push('$library:$dir');
+				else if (Assets.exists(dir) && !dirs.contains(dir))
+					dirs.push(dir);
+			}
+		}
+		return dirs.map(dir -> dir.substr(dir.lastIndexOf("/") + 1));
+		#end
+	}
 }

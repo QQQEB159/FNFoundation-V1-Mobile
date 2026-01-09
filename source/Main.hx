@@ -18,6 +18,10 @@ import meta.states.*;
 import meta.data.*;
 import meta.CompilationStuff;
 
+#if mobile
+import mobile.CopyState;
+#end
+
 class Main extends Sprite
 {
 	var gameWidth:Int = 1280; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
@@ -37,10 +41,22 @@ class Main extends Sprite
 	public static function main():Void
 	{
 		Lib.current.addChild(new Main());
+		#if cpp
+		cpp.NativeGc.enable(true);
+		#elseif hl
+		hl.Gc.enable(true);
+		#end
 	}
 
 	public function new()
 	{
+		#if mobile
+		#if android
+		StorageUtil.requestPermissions();
+		#end
+		Sys.setCwd(StorageUtil.getStorageDirectory());
+		#end
+		
 		super();
 
 		if (stage != null)
@@ -78,68 +94,36 @@ class Main extends Sprite
 
 	private function setupGame():Void
 	{
-		var stageWidth:Int = Lib.current.stage.stageWidth;
-		var stageHeight:Int = Lib.current.stage.stageHeight;
-
-		if (zoom == -1)
-		{
-			var ratioX:Float = stageWidth / gameWidth;
-			var ratioY:Float = stageHeight / gameHeight;
-			zoom = Math.min(ratioX, ratioY);
-			gameWidth = Math.ceil(stageWidth / zoom);
-			gameHeight = Math.ceil(stageHeight / zoom);
-		}
-
-		// #if !debug
-		// #if HIT_SINGLE
-		// initialState = meta.states.HitSingleInit;
-		// #else
-		// initialState = TitleState;		
-		// #end
-		// #end
-
 		ClientPrefs.loadDefaultKeys();
-		addChild(new FNFGame(gameWidth, gameHeight, initialState, #if(flixel < "5.0.0")zoom,#end framerate, framerate, skipSplash, startFullscreen));
+		addChild(new FNFGame(gameWidth, gameHeight, #if (mobile && MODS_ALLOWED) !CopyState.checkExistingFiles() ? CopyState : #end initialState, #if(flixel < "5.0.0")zoom,#end framerate, framerate, skipSplash, startFullscreen));
 
-		#if !mobile
 		fpsVar = new FPSCounter(10, 3, 0xFFFFFF);
-		addChild(fpsVar);
+		FlxG.game.addChild(fpsVar);
 		Lib.current.stage.align = "tl";
 		Lib.current.stage.scaleMode = StageScaleMode.NO_SCALE;
 		if(fpsVar != null) {
 			fpsVar.visible = ClientPrefs.showFPS;
 		}
-		#end
-		
-		// #if !DEBUG_MODE
-		// 	compilationInformation = new TextField();
-		// 	compilationInformation.height = FlxG.stage.stageHeight/2;
-		// 	compilationInformation.width = FlxG.stage.stageWidth;
-		// 	compilationInformation.defaultTextFormat = new TextFormat('_sans', 48, FlxColor.WHITE, null, null, null, null, null, openfl.text.TextFormatAlign.CENTER);
-		// 	compilationInformation.text = Date.now().toString() + '\n' + Sys.environment()["USERNAME"].trim();
-		// 	compilationInformation.alpha = 0.675;
-		// 	addChild(compilationInformation);
-		// #end
-
 
 		#if html5
 		FlxG.autoPause = false;
 		FlxG.mouse.visible = false;
 		#end
+		
+		#if mobile
+		lime.system.System.allowScreenTimeout = ClientPrefs.screensaver;
+		#if android
+		FlxG.android.preventDefaultKeys = [BACK]; 
+		#end
+		#end
 
 		FlxG.signals.gameResized.add(onResize);
 		FlxG.signals.preStateSwitch.add(onStateSwitch);
 		FlxG.scaleMode = scaleMode = new FunkinRatioScaleMode();
-
-
-
-
-
 	}
 	private static function onStateSwitch() {
 		scaleMode.resetSize();
 	}
-
 
 	static function onResize(w,h) 
 	{
@@ -147,13 +131,6 @@ class Main extends Sprite
 		if (fpsVar != null) {
 			fpsVar.scaleX = fpsVar.scaleY = scale;
 		}
-		// if (compilationInformation!=null) {
-
-		// 	compilationInformation.scaleX = compilationInformation.scaleY = Math.max(1,scale);
-		// 	compilationInformation.height = h;
-		// 	compilationInformation.width = w;
-		// 	compilationInformation.y = h/2;
-		// }
 
 		@:privateAccess if (FlxG.cameras != null) for (i in FlxG.cameras.list) if (i != null && i._filters != null) resetSpriteCache(i.flashSprite);
 		if (FlxG.game != null) resetSpriteCache(FlxG.game);
