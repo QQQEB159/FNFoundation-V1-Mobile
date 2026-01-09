@@ -3773,7 +3773,9 @@ class PlayState extends MusicBeatState
 		MusicBeatState.switchState(new ChartingState());
 		chartingMode = true;
 
+		#if DISCORD_ALLOWED
 		DiscordClient.updatePresence("Editing" + StringTools.replace(SONG.song, '-', ' '), "Chart Editor:");
+		#end
 	}
 
 	//dyanimc fucntion than nk u
