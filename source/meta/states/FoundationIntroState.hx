@@ -7,7 +7,7 @@ import flixel.addons.text.FlxTypeText;
 import haxe.Json;
 import flixel.FlxState;
 
-class FoundationIntroState extends FlxState
+class FoundationIntroState extends MusicBeatState
 {
 	private static var introData:FoundationTypewriteFile;
 	public static var currentSegment:FoundationTypewriteSegment;
@@ -70,7 +70,7 @@ class FoundationIntroState extends FlxState
 
 		FoundationOptionsState.exitState = null;
 		
-		MusicBeatState.getState().addTouchPad("NONE", "Y_N");
+		addTouchPad("NONE", "Y_N");
 	}
 
 	override function destroy()
@@ -93,7 +93,7 @@ class FoundationIntroState extends FlxState
 			if (FlxG.keys.justPressed.ANY)
 				onShitPressed(FlxG.keys.justPressed);
 				
-			if (MusicBeatState.getState().touchPad.buttonY.justPressed)
+			if (touchPad.buttonY.justPressed)
 			{
 			    processInputs = false;
 			    switch (FoundationIntroState.specialId)
@@ -121,7 +121,7 @@ class FoundationIntroState extends FlxState
 			    }
 			    FlxG.sound.play(Paths.sound("desktop/sKeyboard" + Std.string(FlxG.random.int(0, 4))));
 			}
-			else if (MusicBeatState.getState().touchPad.buttonN.justPressed)
+			else if (touchPad.buttonN.justPressed)
 			{
 			    processInputs = false;
 			    switch (FoundationIntroState.specialId)

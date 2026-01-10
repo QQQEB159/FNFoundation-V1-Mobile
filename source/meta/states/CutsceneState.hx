@@ -61,6 +61,9 @@ class CutsceneState extends MusicBeatState
 		skipSprite.y = FlxG.height - (skipSprite.height + 72);
 		skipSprite.amount = 0;
 		add(skipSprite);
+		
+		addTouchPad("NONE", "A");
+		addTouchPadCamera();
 	}
 
 	override function update(elapsed:Float)

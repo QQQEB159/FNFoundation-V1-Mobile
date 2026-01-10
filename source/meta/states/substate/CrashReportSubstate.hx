@@ -11,7 +11,7 @@ import meta.states.*;
 import gameObjects.Alphabet;
 import meta.data.*;
 
-class CrashReportSubstate extends FlxState {
+class CrashReportSubstate extends MusicBeatState {
 	var underText:FlxText;
     public var error:String;
     public var errorName:String;
@@ -60,12 +60,14 @@ class CrashReportSubstate extends FlxState {
 		FlxTween.tween(bg, {alpha: 0.6}, 0.6, {ease: FlxEase.cubeOut});
 
 		this.camera = FlxG.cameras.list[FlxG.cameras.list.length - 1];
+		
+		addTouchPad("NONE", "A");
     }
 
 	override function update(elapsed:Float):Void {
 		super.update(elapsed);
 
-		if (FlxG.keys.justPressed.SPACE){
+		if (FlxG.keys.justPressed.SPACE || touchPad.buttonA.justPressed){
 			Init.SwitchToPrimaryMenu();
         }
 	}

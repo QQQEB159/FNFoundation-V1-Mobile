@@ -8,6 +8,7 @@ import meta.states.FoundationDesktopState.FoundationDesktopBaseWindow;
 import meta.states.substate.MusicBeatSubstate;
 import flixel.input.mouse.FlxMouseEvent;
 import flixel.group.FlxSpriteGroup;
+import flixel.ui.FlxButton;
 
 class FoundationDesktopFootageWindow extends FoundationDesktopBaseWindow {
     var songs:Array<String> = [];
@@ -20,6 +21,9 @@ class FoundationDesktopFootageWindow extends FoundationDesktopBaseWindow {
     var songsFit:Int = 6;
     
     var coverUp:FlxSprite;
+    
+    var scrollUpButton:FlxButton;
+    var scrollDownButton:FlxButton;
 
     public static var transitioning:Bool = false;
 
@@ -70,6 +74,18 @@ class FoundationDesktopFootageWindow extends FoundationDesktopBaseWindow {
         coverUp = new FlxSprite(26, 430).makeGraphic(655, 10, FlxColor.WHITE);
         coverUp.alpha = 0.15;
         add(coverUp);
+        
+        scrollUpButton = new FlxButton(690, 80, "↑", scrollUp);
+        scrollUpButton.setGraphicSize(30, 30);
+        scrollUpButton.updateHitbox();
+        scrollUpButton.label.setFormat(Paths.font('vcr.ttf'), 24, FlxColor.BLACK, CENTER);
+        add(scrollUpButton);
+
+        scrollDownButton = new FlxButton(690, 430, "↓", scrollDown);
+        scrollDownButton.setGraphicSize(30, 30);
+        scrollDownButton.updateHitbox();
+        scrollDownButton.label.setFormat(Paths.font('vcr.ttf'), 24, FlxColor.BLACK, CENTER);
+        add(scrollDownButton);
 
         for (i in 0...songs.length) {
             var songBG = new FlxSprite(26, (50 * i) + 80).makeGraphic(655, 50, FlxColor.WHITE);
@@ -132,6 +148,14 @@ class FoundationDesktopFootageWindow extends FoundationDesktopBaseWindow {
         add(songTxts);
     }
 
+    function scrollUp() {
+        
+    }
+
+    function scrollDown() {
+        
+    }
+    
     override function update(elapsed:Float) {
         super.update(elapsed);
 

@@ -20,7 +20,7 @@ var transition:PsychVideoSprite;
 var blackout:FlxSprite;
 
 function onLoad() {
-
+    PlayState.qqqeb = true;
     // Preload sounds
     Paths.sound('captivated/knifeHit1');
     Paths.sound('captivated/knifeHit2');
@@ -294,7 +294,7 @@ function onBeatHit() {
 
 function onUpdate(elapsed:Float) {
     if (needToPress) {
-        if (FlxG.keys.justPressed.SPACE) {
+        if (FlxG.keys.justPressed.SPACE || MusicBeatState.getState().mobileControls.buttonExtra.justPressed) {
             pressedSpace = true;
             warning.color = 0xFF67B280;
             FlxTween.color(warning, 0.5, 0xFF67B280, FlxColor.WHITE);
