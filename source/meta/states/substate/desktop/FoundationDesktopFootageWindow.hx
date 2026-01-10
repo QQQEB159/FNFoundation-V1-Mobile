@@ -149,11 +149,39 @@ class FoundationDesktopFootageWindow extends FoundationDesktopBaseWindow {
     }
 
     function scrollUp() {
-        
+        moveSongs(1);
     }
 
     function scrollDown() {
-        
+        moveSongs(-1);
+    }
+    
+    function moveSongs(scroll:Int) {
+        var shouldMove:Bool = true;
+            
+        scrolledPast -= scroll;
+
+        if (scrolledPast < 0) {scrolledPast = 0; shouldMove = false;}
+        else if (scrolledPast > songs.length - songsFit - 1) {scrolledPast = songs.length - songsFit - 1; shouldMove = false;}
+
+        if (shouldMove) {
+            for (i in 0...songTxts.length) {
+                songTxts.members[i].y += 50 * scroll;
+                songBgs.members[i].y += 50 * scroll;
+
+                if (i < scrolledPast || i > songsFit + scrolledPast) {
+                    songTxts.members[i].visible = false;
+                    songBgs.members[i].visible = false;
+                }
+                else {
+                    songTxts.members[i].visible = true;
+                    songBgs.members[i].visible = true;
+                }
+
+                if (songBgs.members[i].visible)
+                    coverUp.color = songBgs.members[i].color;
+            }
+        }
     }
     
     override function update(elapsed:Float) {

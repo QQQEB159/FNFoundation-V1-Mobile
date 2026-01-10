@@ -3,6 +3,7 @@ package meta.states;
 import meta.data.PlayerSettings;
 import flixel.addons.display.FlxPieDial;
 import gameObjects.PsychVideoSprite;
+import mobile.TouchUtil;
 
 class CutsceneState extends MusicBeatState
 {
@@ -61,9 +62,6 @@ class CutsceneState extends MusicBeatState
 		skipSprite.y = FlxG.height - (skipSprite.height + 72);
 		skipSprite.amount = 0;
 		add(skipSprite);
-		
-		addTouchPad("NONE", "A");
-		addTouchPadCamera();
 	}
 
 	override function update(elapsed:Float)
@@ -72,7 +70,7 @@ class CutsceneState extends MusicBeatState
 
         if (!canSkip) return;
 
-		if (PlayerSettings.player1.controls.ACCEPT_HOLD)
+		if (PlayerSettings.player1.controls.ACCEPT_HOLD || TouchUtil.pressed)
 		{
 			holdingTime = Math.max(0, Math.min(_timeToSkip, holdingTime + elapsed));
 		}
