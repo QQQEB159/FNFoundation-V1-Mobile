@@ -99,7 +99,7 @@ class FoundationInventorySubstate extends MusicBeatSubstate
 	{
 		super.update(elapsed);
 
-		if ((controls.BACK || FlxG.keys.justPressed.Q) && canClose) 
+		if ((controls.BACK || FlxG.keys.justPressed.Q || touchPad.buttonB.justPressed) && canClose) 
 			close();
 	}
 

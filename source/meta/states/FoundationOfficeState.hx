@@ -193,6 +193,7 @@ class FoundationOfficeState extends MusicBeatState
 		{
 			inSubstate = true;
 			openSubState(new FoundationInventorySubstate());
+			touchPad.active = touchPad.visible = false;
 			return;
 		}
 
@@ -251,6 +252,11 @@ class FoundationOfficeState extends MusicBeatState
 		FlxG.mouse.visible = false;
 	}
 
+	override function closeSubState() {
+		super.closeSubState();
+		touchPad.active = touchPad.visible = true;
+	}
+	
 	private function turnOn()
 	{
 		turnedOn = true;
