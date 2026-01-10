@@ -71,7 +71,7 @@
 	<assets path="assets/songs"         library="songs"/>
 	<assets path="assets/shared"        library="shared"/>
 
-	<!-- <assets path='content' embed='false' if="MODS_ALLOWED"/> -->
+	<assets path='content' embed='false' if="MODS_ALLOWED"/>
 
 
 	<!-- <template path='mods' /> -->

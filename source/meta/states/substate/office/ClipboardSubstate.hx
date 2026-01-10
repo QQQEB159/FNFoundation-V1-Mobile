@@ -51,7 +51,7 @@ class ClipboardSubstate extends MusicBeatSubstate {
 
         changePage(0);
         
-        addTouchPad("LEFT_RIGHT", "B");
+        addTouchPad("LEFT_RIGHT", "B_J");
 		addTouchPadCamera();
     }
 
