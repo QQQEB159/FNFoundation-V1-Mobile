@@ -90,6 +90,9 @@ class FoundationInventorySubstate extends MusicBeatSubstate
 				itemId += 1;
 			}
 		}
+		
+		addTouchPad("NONE", "B");
+		addTouchPadCamera();
 	}
 
 	override function update(elapsed:Float)

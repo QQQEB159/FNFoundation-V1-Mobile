@@ -109,7 +109,7 @@ class FoundationDesktopState extends MusicBeatState
 				FlxG.sound.play(Paths.sound("desktop/sKeyboard" + Std.string(FlxG.random.int(0, 4))));
 		}
 
-		if (controls.BACK)
+		if (controls.BACK #if android || FlxG.android.justReleased.BACK #end)
 		{
 			if (introBlackoutTween.active)
 				introBlackoutTween.manager.completeAll();

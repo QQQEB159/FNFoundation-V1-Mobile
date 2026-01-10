@@ -50,6 +50,9 @@ class ClipboardSubstate extends MusicBeatSubstate {
             pages.push(unlockablePages[i]);
 
         changePage(0);
+        
+        addTouchPad("LEFT_RIGHT", "B");
+		addTouchPadCamera();
     }
 
     function changePage(delta:Int) {
@@ -114,7 +117,7 @@ class ClipboardSubstate extends MusicBeatSubstate {
         if (controls.UI_RIGHT_P)
             changePage(1);
 
-        if (controls.BACK || FlxG.mouse.justPressed && canClose) {
+        if (controls.BACK && canClose) {
             FoundationInventorySubstate.inSubSubState = false;
             close();
         }

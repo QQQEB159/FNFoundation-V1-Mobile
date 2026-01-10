@@ -140,7 +140,7 @@ class FoundationOfficeState extends MusicBeatState
 			FlxG.sound.music.pause();
 		}
 		
-		addTouchPad("NONE", "A");
+		addTouchPad("NONE", "A_Q");
 		addTouchPadCamera();
 	}
 
@@ -189,7 +189,7 @@ class FoundationOfficeState extends MusicBeatState
 			}
 		}
 
-		if (FlxG.keys.justPressed.Q)
+		if (FlxG.keys.justPressed.Q || touchPad.buttonQ.justPressed)
 		{
 			inSubstate = true;
 			openSubState(new FoundationInventorySubstate());
