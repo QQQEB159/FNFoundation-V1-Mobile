@@ -3,7 +3,7 @@ package meta.states.substate;
 import meta.data.Controls;
 import flixel.FlxSubState;
 
-class MechanicExplanationSubstate extends FlxSubState
+class MechanicExplanationSubstate extends MusicBeatSubstate
 {
     var bg:FlxSprite;
     var mechanic:FlxSprite;
@@ -98,8 +98,8 @@ class MechanicExplanationSubstate extends FlxSubState
             // trace("Can exit now");
         // });
 
-        MusicBeatSubstate.getState().addTouchPad("NONE", "A");
-		MusicBeatSubstate.getState().addTouchPadCamera();
+        addTouchPad("NONE", "A");
+		addTouchPadCamera();
         
         super.create();
 	}
