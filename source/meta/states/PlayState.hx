@@ -1293,10 +1293,10 @@ class PlayState extends MusicBeatState
 		    mobileControls.onButtonDown.add(onButtonPress);
 		    mobileControls.onButtonUp.add(onButtonRelease);
 		}
-		mobileControls.instance.buttonLeft.color = 0xFF8E7BB3;
-        mobileControls.instance.buttonDown.color = 0xFF20205C;
-        mobileControls.instance.buttonUp.color = 0xFFEC6E00;
-        mobileControls.instance.buttonRight.color = 0xFF562C82;
+		mobileControls.buttonLeft.color = 0xFF8E7BB3;
+        mobileControls.buttonDown.color = 0xFF20205C;
+        mobileControls.buttonUp.color = 0xFFEC6E00;
+        mobileControls.buttonRight.color = 0xFF562C82;
 		
 		generateSong(SONG.song);
 		modManager = new ModManager(this);
