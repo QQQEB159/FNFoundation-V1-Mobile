@@ -105,7 +105,7 @@ class PsychVideoSprite extends FlxVideoSprite
     override function update(elapsed:Float) {
         super.update(elapsed);
         if (canSkip) {
-            if (PlayerSettings.player1.controls.ACCEPT) {
+            if (PlayerSettings.player1.controls.ACCEPT #if android || FlxG.android.justReleased.BACK #end) {
                 bitmap.onEndReached.dispatch();
             }
         }

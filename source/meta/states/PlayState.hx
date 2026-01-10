@@ -417,6 +417,8 @@ class PlayState extends MusicBeatState
 	public var camCurTarget:Character = null;
 
 	public var scoreAllowedToBop:Bool = true;
+	
+	public static var qqqeb:Bool = false;
 
 	// for hscripts, cant think of another way for it to work
 	override function add(Object:FlxBasic):FlxBasic { return super.add(Object); } 
@@ -5731,6 +5733,7 @@ class PlayState extends MusicBeatState
 		#if HIT_SINGLE
 		Yoshi.resume();
 		#end
+		qqqeb = false;
 		super.destroy();
 	}
 
