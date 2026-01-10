@@ -7,7 +7,7 @@ import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
 import flixel.util.FlxTimer;
-import flixel.sound.FlxSound;
+import flixel.system.FlxSound;
 import mobile.objects.Alphabet as ThisAlphabet;
 import openfl.media.Sound;
 

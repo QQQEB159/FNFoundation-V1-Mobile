@@ -121,6 +121,9 @@ class MusicBeatSubstate extends FlxSubState
 		super.destroy();
 	}
 	
+	public static function getState():MusicBeatSubstate
+		return cast (FlxG.state, MusicBeatSubstate);
+	
 	override function update(elapsed:Float)
 	{
 		//everyStep();
