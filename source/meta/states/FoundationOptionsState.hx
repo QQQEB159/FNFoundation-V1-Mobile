@@ -73,6 +73,9 @@ class FoundationOptionsState extends MusicBeatSubstate
 		add(blackout);
 
 		introBlackoutTween = FlxTween.tween(blackout, {"alpha": 0}, 0.5);
+		
+		addTouchPad("NONE", "B");
+		addTouchPadCamera();
 	}
 
     override function destroy() {
