@@ -111,6 +111,11 @@ class FoundationInventorySubstate extends MusicBeatSubstate
 		super.destroy();
 	}
 
+	override function closeSubState() {
+		super.closeSubState();
+		touchPad.active = touchPad.visible = true;
+	}
+	
 	private function onItemClicked(id:String)
 	{
 		if (inSubSubState)
@@ -123,6 +128,7 @@ class FoundationInventorySubstate extends MusicBeatSubstate
 			case "clipboard":
 				inSubSubState = true;
 				openSubState(new ClipboardSubstate());
+				touchPad.active = touchPad.visible = false;
 			case "usb":
 				CoolUtil.createCBMessage("Not yet.", 2);
 				// close();
