@@ -1,6 +1,7 @@
 package meta.states;
 
 import flixel.addons.transition.FlxTransitionableState;
+import mobile.TouchUtil;
 
 class FoundationMainMenuState extends MusicBeatState
 {
@@ -128,7 +129,7 @@ class FoundationMainMenuState extends MusicBeatState
 	}
 
     override public function update(dt:Float) {
-        if (canStart && controls.ACCEPT && !transitioning) {
+        if (canStart && (controls.ACCEPT || TouchUtil.justPressed) && !transitioning) {
             transitioning = true;
             
             FlxG.sound.music.fadeOut(0.5, 0, (t) -> FlxG.sound.music = null);

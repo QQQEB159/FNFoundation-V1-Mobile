@@ -69,6 +69,8 @@ class FoundationIntroState extends FlxState
 			FlxG.sound.playMusic(Paths.music("intro"), 0.5);
 
 		FoundationOptionsState.exitState = null;
+		
+		addTouchPad("NONE", "Y_N");
 	}
 
 	override function destroy()
@@ -90,6 +92,50 @@ class FoundationIntroState extends FlxState
 		{
 			if (FlxG.keys.justPressed.ANY)
 				onShitPressed(FlxG.keys.justPressed);
+				
+			if (touchPad.buttonY.justPressed)
+			{
+			    processInputs = false;
+			    switch (FoundationIntroState.specialId)
+			    {
+				    case "truth":
+					    changeSegmentTo("honest");
+				    case "openOptions":
+                        FoundationOptionsState.exitState = FoundationIntroState;
+                        changeSegmentDry("disclaimer");
+
+					    FlxTween.tween(blackout, {"alpha": 1}, 0.5, {
+						    onComplete: (twn:FlxTween) ->
+						    {
+							    addPastText(pastLine.text);
+							    pastLine = null;
+
+							    FlxTransitionableState.skipNextTransIn = true;
+							    FlxTransitionableState.skipNextTransOut = true;
+							    FlxG.switchState(new FoundationOptionsState());
+						    }
+					    });
+					
+				    case "acceptDisclaimer":
+					    changeSegmentTo("accepted");
+			    }
+			    FlxG.sound.play(Paths.sound("desktop/sKeyboard" + Std.string(FlxG.random.int(0, 4))));
+			}
+			else if (touchPad.buttonN.justPressed)
+			{
+			    processInputs = false;
+			    switch (FoundationIntroState.specialId)
+			    {
+				    case "truth":
+					    changeSegmentTo("lying");
+				    case "openOptions":
+					    changeSegmentTo("disclaimer");
+				    case "acceptDisclaimer":
+					    FlxG.sound.music.fadeOut();
+					    changeSegmentTo("denied");
+				FlxG.sound.play(Paths.sound("desktop/sKeyboard" + Std.string(FlxG.random.int(0, 4))));
+			    }
+			}
 		}
 
         if (FlxG.keys.justPressed.ANY) {

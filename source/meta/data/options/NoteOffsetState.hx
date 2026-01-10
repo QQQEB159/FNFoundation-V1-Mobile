@@ -201,6 +201,9 @@ class NoteOffsetState extends MusicBeatState
 		Conductor.changeBPM(128.0);
 		FlxG.sound.playMusic(Paths.music('offsetSong'), 1, true);
 
+		addTouchPad(onComboMenu ? "NONE" : "LEFT_RIGHT", "A_B_C");
+		addTouchPadCamera();
+		
 		super.create();
 	}
 
@@ -299,7 +302,7 @@ class NoteOffsetState extends MusicBeatState
 				}
 			}
 
-			if(controls.RESET)
+			if(controls.RESET || touchPad.buttonC.justPressed)
 			{
 				for (i in 0...ClientPrefs.comboOffset.length)
 				{
@@ -337,7 +340,7 @@ class NoteOffsetState extends MusicBeatState
 				updateNoteDelay();
 			}
 
-			if(controls.RESET)
+			if(controls.RESET || touchPad.buttonC.justPressed)
 			{
 				holdTime = 0;
 				barPercent = 0;

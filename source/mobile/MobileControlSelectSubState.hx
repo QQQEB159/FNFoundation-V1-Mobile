@@ -38,8 +38,7 @@ import flixel.ui.FlxButton as UIButton;
 import mobile.TouchButton;
 import mobile.TouchUtil;
 import mobile.objects.Alphabet;
-import funkin.backend.*;
-import funkin.states.*;
+import meta.states.substate.MusicBeatSubstate;
 import flixel.addons.transition.FlxTransitionableState;
 
 using StringTools;

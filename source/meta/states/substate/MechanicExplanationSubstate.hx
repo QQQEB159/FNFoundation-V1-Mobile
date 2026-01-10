@@ -98,6 +98,9 @@ class MechanicExplanationSubstate extends FlxSubState
             // trace("Can exit now");
         // });
 
+        addTouchPad("NONE", "A");
+		addTouchPadCamera();
+        
         super.create();
 	}
 

@@ -139,6 +139,9 @@ class FoundationOfficeState extends MusicBeatState
 			ambience.fadeIn(1);
 			FlxG.sound.music.pause();
 		}
+		
+		addTouchPad("NONE", "A");
+		addTouchPadCamera();
 	}
 
 	var keycombo:String = "";

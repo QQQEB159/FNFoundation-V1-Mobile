@@ -53,6 +53,9 @@ class FoundationPauseMenuSubstate extends MusicBeatSubstate
 		arrow.updateHitbox();
 		add(arrow);
 
+		addTouchPad("UP_DOWN", "A");
+		addTouchPadCamera();
+		
 		changeOption(0, true);
 	}
 

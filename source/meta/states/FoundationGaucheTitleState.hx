@@ -2,6 +2,7 @@ package meta.states;
 
 import flixel.group.FlxSpriteGroup;
 import meta.data.Song;
+import mobile.TouchUtil;
 
 class FoundationGaucheTitleState extends MusicBeatState
 {
@@ -108,7 +109,7 @@ class FoundationGaucheTitleState extends MusicBeatState
             if (s.x < -450) s.x = FlxG.width + 100;
         });
 
-        if (canEnter && controls.ACCEPT) {
+        if (canEnter && (controls.ACCEPT || TouchUtil.justPressed)) {
             canEnter = false;
             FlxTween.tween(fuckassPlane, {"x": -2900}, 0.15);
             new FlxTimer().start(0.15, (t) -> {

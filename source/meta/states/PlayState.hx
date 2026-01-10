@@ -86,6 +86,10 @@ import modchart.*;
 import sys.FileSystem;
 #end
 
+import mobile.TouchButton;
+import mobile.TouchPad;
+import mobile.input.MobileInputID;
+
 using StringTools;
 
 typedef LineData = {
@@ -1276,6 +1280,18 @@ class PlayState extends MusicBeatState
 		splash.alpha = 0.0;
 		// startCountdown();
 
+		#if !android
+		addTouchPad("NONE", "P");
+		addTouchPadCamera();
+		touchPad.visible = true;
+		#end
+		addMobileControls();
+		if (!ClientPrefs.controllerMode)
+		{
+		    mobileControls.onButtonDown.add(onButtonPress);
+		    mobileControls.onButtonUp.add(onButtonRelease);
+		}
+		
 		generateSong(SONG.song);
 		modManager = new ModManager(this);
 		hscriptSetDefault("modManager", modManager);
@@ -2066,7 +2082,7 @@ class PlayState extends MusicBeatState
 			callOnHScripts('postModifierRegister', []);
 
 			new FlxTimer().start(countdownDelay, (t:FlxTimer)->{
-				startedCountdown = true;
+				startedCountdown = mobileControls.instance.visible = true;
 				Conductor.songPosition = 0;
 				Conductor.songPosition -= Conductor.crotchet * 5;
 				setOnLuas('startedCountdown', true);
@@ -3228,7 +3244,7 @@ class PlayState extends MusicBeatState
 		// 	botplayTxt.alpha = 1 - Math.sin((Math.PI * botplaySine) / 180);
 		// }
 
-		if (controls.PAUSE && startedCountdown && canPause && (explainedMechanic || !ClientPrefs.mechanicExplanations))
+		if ((#if android FlxG.android.justReleased.BACK #else touchPad.buttonP.justPressed #end || controls.PAUSE) && startedCountdown && canPause && (explainedMechanic || !ClientPrefs.mechanicExplanations))
 		{
 			var ret:Dynamic = callOnScripts('onPause', []);
 			if(ret != Globals.Function_Stop) {
@@ -4475,6 +4491,8 @@ class PlayState extends MusicBeatState
 		deathCounter = 0;
 		seenCutscene = false;
 		explainedMechanic = false;
+		
+		mobileControls.instance.visible = #if !android touchPad.visible = #end false;
 
 		FoundationGameOverSubstate.videoOverride = "";
 
@@ -4955,6 +4973,101 @@ class PlayState extends MusicBeatState
 		return -1;
 	}
 
+	private function onButtonPress(button:TouchButton):Void
+	{
+		if (button.IDs.filter(id -> id.toString().startsWith("EXTRA")).length > 0)
+			return;
+
+		var buttonCode:Int = (button.IDs[0].toString().startsWith('NOTE')) ? button.IDs[0] : button.IDs[1];
+
+		if (cpuControlled || paused || !startedCountdown) return;
+		
+		if (buttonCode > -1 && button.justPressed)
+		{
+		    if(!boyfriend.stunned && generatedMusic && !endingSong)
+			{
+				//more accurate hit time for the ratings?
+				var lastTime:Float = Conductor.songPosition;
+				Conductor.songPosition = FlxG.sound.music.time;
+
+				var canMiss:Bool = !ClientPrefs.ghostTapping;
+
+				var pressNotes:Array<Note> = [];
+
+				var ghostTapped:Bool = true;
+				for(field in playFields.members){
+					if (field.playerControls && field.inControl && !field.autoPlayed){
+						var sortedNotesList:Array<Note> = field.getTapNotes(buttonCode);
+						sortedNotesList.sort((a, b) -> Std.int(a.strumTime - b.strumTime));
+
+						if (sortedNotesList.length > 0) {
+							pressNotes.push(sortedNotesList[0]);
+							field.noteHitCallback(sortedNotesList[0], field);
+						}
+					}
+				}
+
+				if(pressNotes.length==0){
+					callOnScripts('onGhostTap', [buttonCode]);
+					if (canMiss) {
+						noteMissPress(buttonCode);
+						callOnScripts('noteMissPress', [buttonCode]);
+					}
+				}
+
+				// I dunno what you need this for but here you go
+				//									- Shubs
+
+				// Shubs, this is for the "Just the Two of Us" achievement lol
+				//									- Shadow Mario
+
+				// LOOOOOL
+				// 									- ava
+				keysPressed[buttonCode] = true;
+
+				//more accurate hit time for the ratings? part 2 (Now that the calculations are done, go back to the time it was before for not causing a note stutter)
+				Conductor.songPosition = lastTime;
+			}
+
+			for(field in playFields.members){
+				if (field.inControl && !field.autoPlayed && field.playerControls){
+					var spr:StrumNote = field.members[buttonCode];
+					if(spr != null && spr.animation.curAnim.name != 'confirm')
+					{
+						spr.playAnim('pressed');
+						spr.resetAnim = 0;
+					}
+				}
+			}
+
+			callOnScripts('onKeyPress', [buttonCode]);
+		}
+	}
+
+	private function onButtonRelease(button:TouchButton):Void
+	{
+		if (button.IDs.filter(id -> id.toString().startsWith("EXTRA")).length > 0)
+			return;
+
+		var buttonCode:Int = (button.IDs[0].toString().startsWith('NOTE')) ? button.IDs[0] : button.IDs[1];
+
+		if (startedCountdown && !paused && buttonCode > -1)
+		{
+			for(field in playFields.members){
+				if (field.inControl && !field.autoPlayed && field.playerControls)
+				{
+					var spr:StrumNote = field.members[buttonCode];
+					if (spr != null)
+					{
+						spr.playAnim('static');
+						spr.resetAnim = 0;
+					}
+				}
+			}
+			callOnScripts('onKeyRelease', [buttonCode]);
+		}
+	}
+	
 	// Hold notes
 	private function keyShit():Void
 	{
